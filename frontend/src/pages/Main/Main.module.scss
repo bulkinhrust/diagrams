@@ -1,3 +1,26 @@
 .component {
 
+
+
+
+  .content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cost {
+    position: relative;
+  }
+
+  .cost:after {
+    content: '* за первый день';
+    position: absolute;
+    top: -5px;
+    right: -80px;
+    color: var(--main-color-300);
+    font-size: 0.6rem;
+  }
 }

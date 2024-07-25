@@ -1,0 +1,16 @@
+.component {
+  background-color: var(--main-color-500);
+  padding: 16px 32px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: .2rem;
+  cursor: pointer;
+}

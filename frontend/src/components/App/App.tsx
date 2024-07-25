@@ -1,17 +1,18 @@
-import { useRoutes } from 'react-router-dom';
-
-import reactLogo from '../../assets/react.svg';
-import viteLogo from '../../../public/vite.svg';
-import './App.scss';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import userStore from '../../stores/user/userStore';
 import AppRouter from '../AppRouter';
+import Header from '../Header';
 
-function App() {
+const App: React.FC = observer(() => {
+  const { isAuth, user } = userStore;
 
   return (
-    <div id="123">
-      <AppRouter />
+    <div>
+      <Header isAuth={isAuth} user={user} />
+      <AppRouter isAuth={isAuth} />
     </div>
   )
-}
+});
 
 export default App

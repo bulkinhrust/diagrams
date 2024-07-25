@@ -1,10 +1,11 @@
-const Router = require('express');
-const diagramRouter = require('./diagramRouter');
-const userRouter = require('./userRouter');
+import { Router } from 'express';
 
-const router = new Router();
+import diagramRouter from './diagramRouter';
+import userRouter from './userRouter';
+
+const router = Router();
 
 router.use('/diagram', diagramRouter);
 router.use('/user', userRouter);
 
-module.exports = router;
+export default router;

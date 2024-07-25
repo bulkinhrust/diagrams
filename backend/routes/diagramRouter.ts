@@ -1,8 +1,11 @@
-const Router = require('express');
+import { Router } from 'express';
 
-const router = new Router();
+import diagramController from '../controllers/diagramController';
 
-router.get('/');
-router.post('/');
+const router = Router();
 
-module.exports = router;
+router.get('/', diagramController.getAll);
+router.get('/:id', diagramController.getById);
+router.post('/', diagramController.create);
+
+export default router;

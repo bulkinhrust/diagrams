@@ -1,11 +1,11 @@
-const Router = require('express');
+import Router from 'express';
+import userController from '../controllers/userController';
+import authMiddleware from '../middleware/AuthMiddleware';
 
-const router = new Router();
+const router = Router();
 
-router.post('/registration');
-router.post('/login');
-router.get('/auth', (req, res) => {
-  res.json({ message: 'okkk' });
-});
+router.post('/registration', userController.registration);
+router.post('/login', userController.login);
+router.get('/auth', authMiddleware, userController.check);
 
-module.exports = router;
+export default router;

@@ -1,0 +1,17 @@
+version: "3.5"
+
+volumes:
+  postgres_volume:
+
+services:
+  diagrams_db:
+    env_file: ".env"
+    container_name: diagrams_db
+    restart: always
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    image: postgres:12.19-alpine3.20
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data

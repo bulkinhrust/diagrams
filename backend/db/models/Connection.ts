@@ -1,23 +1,22 @@
 import {
-  BelongsTo,
   Column,
   CreatedAt,
   DataType,
-  ForeignKey, HasMany,
+  ForeignKey, HasMany, HasOne,
   Model,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import Connection from './Connection';
 import Diagram from './Diagram';
+import Element from './Element';
 
 @Table({
   timestamps: true,
-  tableName: 'elements',
-  modelName: 'Element',
+  tableName: 'connections',
+  modelName: 'Connection',
 })
 
-class Element extends Model {
+class Connection extends Model {
   @Column({
     type: DataType.INTEGER,
     autoIncrement: true,
@@ -38,42 +37,29 @@ class Element extends Model {
   declare diagram_id: number;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.JSONB,
   })
-  declare x: number;
-
-  @Column({
-    type: DataType.INTEGER,
-  })
-  declare y: number;
-
-  @Column({
-    type: DataType.INTEGER,
-  })
-  declare width: number;
-
-  @Column({
-    type: DataType.INTEGER,
-  })
-  declare height: number;
+  declare points: string;
 
   @Column({
     type: DataType.ENUM,
-    values: ['circle', 'triangle', 'rectangle'],
+    values: ['arrow', 'line', 'dashArrow', 'dashLine'],
   })
   declare type: string;
+
+  @ForeignKey(() => Element)
+  @Column
+  declare source_element: number;
+
+  @ForeignKey(() => Element)
+  @Column
+  declare target_element: number;
 
   @CreatedAt
   declare created_at: Date;
 
   @UpdatedAt
   declare updated_at: Date;
-
-  @HasMany(() => Connection)
-  declare connections: Connection[];
-
-  // @BelongsTo(() => Connection)
-  // declare connections: Connection[];
 }
 
-export default Element;
+export default Connection;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Main from '../../pages/Main';
 
+import Main from '../../pages/Main';
 import { authRoutes, publicRoutes } from './AppRouter.routes';
 
 type Props = {

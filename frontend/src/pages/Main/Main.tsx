@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../modules/ui-kit';
+import { Button } from '@UIKit';
 import userStore from '../../stores/user/userStore';
 import classes from './Main.module.scss';
 

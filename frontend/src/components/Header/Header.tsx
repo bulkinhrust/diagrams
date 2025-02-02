@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import User from '../../models/User';
-import { Button } from '../../modules/ui-kit';
+import { Button } from '../../modules/UIKit';
 import classes from './Header.module.scss';
 
 type Props = {

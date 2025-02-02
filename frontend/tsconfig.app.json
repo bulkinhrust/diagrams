@@ -20,7 +20,12 @@
     "isolatedModules": true,
     "useDefineForClassFields": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@modules/*": ["./src/modules/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@UIKit": ["./src/modules/UIKit/index"],
+    }
   },
   "include": ["src"]
 }

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
+import '@modules/UIKit/styles/styles.scss';
 import App from './components/App';
 import './index.scss';
-import './modules/ui-kit/styles/styles.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

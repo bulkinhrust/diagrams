@@ -1,8 +1,16 @@
 import {
-  Column, CreatedAt,
-  DataType, HasMany,
+  AllowNull,
+  AutoIncrement,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  HasMany,
   Model,
-  Table, UpdatedAt,
+  PrimaryKey,
+  Table,
+  Unique,
+  UpdatedAt,
 } from 'sequelize-typescript';
 import Diagram from './Diagram';
 
@@ -13,38 +21,42 @@ import Diagram from './Diagram';
 })
 
 class User extends Model {
-  @Column({
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  })
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
   declare id: string;
 
-  @Column({
-    type: DataType.STRING,
-    unique: true,
-  })
+  @AllowNull(false)
+  @Column(DataType.STRING)
   declare email: string;
 
-  @Column({
-    type: DataType.STRING,
-  })
+  @Column(DataType.STRING)
   declare password: string;
 
-  @Column({
-    type: DataType.STRING,
-    defaultValue: 'USER',
-  })
+  @Column(DataType.STRING)
+  declare googleId: string;
+
+  @Column(DataType.STRING)
+  declare yandexId: string;
+
+  @Column(DataType.TEXT)
+  declare refreshToken: string;
+
+  @Default('USER')
+  @Column(DataType.STRING)
   declare role: string;
+
+  @Column(DataType.STRING)
+  declare picture: string;
 
   @HasMany(() => Diagram)
   declare diagrams: Diagram[];
 
   @CreatedAt
-  declare created_at: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
-  declare updated_at: Date;
+  declare updatedAt: Date;
 }
 
 export default User;

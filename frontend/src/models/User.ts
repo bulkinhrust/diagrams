@@ -3,10 +3,16 @@ export default class User {
 
   email = '';
 
+  name = '';
+
+  picture = '';
+
   constructor(data?: User) {
     if (data) {
       this.id = data.id;
       this.email = data.email;
+      this.name = data.name;
+      this.picture = data.picture;
     }
   }
 }

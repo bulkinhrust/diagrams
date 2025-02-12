@@ -38,6 +38,9 @@ export default defineConfig({
       '@UIKit': path.resolve(__dirname, './src/modules/UIKit/index'),
     },
   },
+  define: {
+    'process.env': process.env,
+  },
   server: {
     open: true,
     port: 3000,

@@ -17,9 +17,6 @@
     "express": "^4.19.2",
     "google-auth-library": "^9.15.1",
     "jsonwebtoken": "^9.0.2",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-yandex": "^0.0.5",
     "sequelize": "^6.37.3",
     "sequelize-typescript": "^2.1.6"
   },

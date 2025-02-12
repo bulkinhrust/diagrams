@@ -5,8 +5,6 @@ import authRouter from './authRouter';
 
 const router = Router();
 
-console.log('+++++++++++', process.env.REFRESH_TOKEN_SECRET);
-
 router.use('/diagram', diagramRouter);
 router.use('/auth', authRouter);
 

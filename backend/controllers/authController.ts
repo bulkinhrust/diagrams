@@ -1,95 +1,98 @@
-import { NextFunction, Request, Response } from 'express';
-import { AuthRequest, AuthRouterHandler } from '../types/RouterHandler';
+import { OAuth2Client } from 'google-auth-library';
+import { CookieOptions, NextFunction, Request, Response } from 'express';
+
 import User from '../db/models/User';
-import authService from '../services/authService';
-import jwt from 'jsonwebtoken';
+import ApiError from '../error/ApiError';
+import { mapUserToDto } from '../mappers/mapUserToDto';
+import { AuthRequest } from '../types/RouterHandler';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/generateTokens';
 
-interface IAuthController {
-  currentUser: AuthRouterHandler<User | null>;
-}
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  'postmessage',
+);
 
-type UserData = {
-  email: string;
-  email_verified: boolean;
-  name: string;
-  picture: string;
+const cookieOptions: CookieOptions = {
+  maxAge: 30 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  path: '/',
+  domain: 'localhost',
+  sameSite: 'strict',
+  secure: false,
 };
 
-class AuthController implements IAuthController {
-  async login() {
-
-  };
-  
-  async googleOAuthHandler(req: Request, res: Response) {
+class AuthController {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
-      // get the code from qs
-      const code = req.query.code as string;
-
-      // get the id and access token with the code
-      const { id_token, access_token } = await authService.getGoogleOAuthTokens(code);
-
-      // get user with tokens
-      const googleUser = jwt.decode(id_token) as UserData;
-      console.log('======', { googleUser });
-
-      if (!googleUser?.email_verified) {
-        return res.status(403).send('Google account is not verified');
-      }
-
-      const user = await this.findOrCreateUser(googleUser);
-
-      // upsert the user
-
-      // create a session
-
-      // create access & refresh tokens
-      const accessToken = jwt.sign(user.toJSON(), 'secret', { expiresIn: '15m' });
-      const refreshToken = jwt.sign(user.toJSON(), 'secret', { expiresIn: '90d' });
-
-      // set cookies 
-      res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        path: '/',
-        domain: 'localhost',
-        sameSite: 'lax',
-        secure: false,
+      const { token } = req.body;
+      // Проверяем токен с помощью Google API
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        path: '/',
-        domain: 'localhost',
-        sameSite: 'lax',
-        secure: false,
-      });
-
-      // redirect back to client
-      res.redirect(process.env.ORIGIN_URL as string);
-    } catch (error) {
-      return res.redirect(process.env.ORIGIN_URL as string)
-    }
-    
-  };
-
-  async findOrCreateUser({ email, picture, name }: UserData) {
-    let user: User | null = null;
-    user = await User.findOne({ where: { email } });
-    if (!user) {
-      user = await User.create({ email, picture, name });
-    }
-
-    return user;
-  }
   
-  async currentUser(
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
-    const user = res.locals.user;
+      const payload = ticket.getPayload();
+      if (!payload) {
+        throw ApiError.unauthorized('Пользователь google не найден');
+      }
+      if (!payload.email_verified) {
+        throw ApiError.unauthorized('Адрес электронной почты не верифицирован');
+      }
+      const { email, name, picture, sub } = payload;
+        
+      // Проверяем есть ли юзер в базе. Если нет, то создаем его.
+      let user = await User.findOne({
+        where: { email, googleId: sub },
+      });
+      if (!user) {
+        user = await User.create({
+          email,
+          googleId: sub,
+          name,
+          picture,
+        });
+      }
+      const userDto = mapUserToDto(user);
+      const accessToken = generateAccessToken(userDto);
+      const refreshToken = generateRefreshToken(userDto);
+        
+      // Ответ пользователю с данными
+      res.cookie('refreshToken', refreshToken, cookieOptions);
+      res.json({ user: userDto, accessToken });
+    } catch (error) {
+      next(error);
+    }
   };
+  
+  async refresh(req: Request, res: Response, next: NextFunction) {
+    const { refreshToken } = req.cookies;
+  
+    if (!refreshToken) {
+      throw ApiError.unauthorized('Ошибка токена');
+    }
+  
+    try {
+      const userDto = verifyRefreshToken(refreshToken);
+      const user = await User.findByPk(userDto?.id);
+      if (!user) {
+        throw ApiError.unauthorized('Пользователь не найден');
+      }
+  
+      const newAccessToken = generateAccessToken(mapUserToDto(user));
+  
+      res.json({ token: newAccessToken });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  async loginWithToken(req: Request, res: Response) {
-    
+  async currentUser(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      res.json(req.user);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

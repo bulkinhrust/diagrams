@@ -1,9 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Response } from 'express';
 import { AuthRequest } from '../types/RouterHandler';
 import { verifyAccessToken } from '../utils/generateTokens';
 import User from '../db/models/User';
-const { OAuth2Client } = require('google-auth-library');
 
 const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
@@ -20,7 +18,7 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunctio
     }
 
     req.user = user;
-    next(); // Передаём управление дальше
+    next();
   } catch (error) {
     res.status(401).json({ message: 'Неверный или истекший токен' });
   }

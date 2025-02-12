@@ -39,9 +39,6 @@ class User extends Model {
   @Column(DataType.STRING)
   declare yandexId: string;
 
-  @Column(DataType.TEXT)
-  declare refreshToken: string;
-
   @Default('USER')
   @Column(DataType.STRING)
   declare role: string;

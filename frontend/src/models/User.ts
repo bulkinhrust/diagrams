@@ -5,7 +5,7 @@ export default class User {
 
   name = '';
 
-  picture = '';
+  picture?: string;
 
   constructor(data?: User) {
     if (data) {

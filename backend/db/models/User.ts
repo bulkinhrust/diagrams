@@ -31,6 +31,9 @@ class User extends Model {
   declare email: string;
 
   @Column(DataType.STRING)
+  declare name: string;
+
+  @Column(DataType.STRING)
   declare password: string;
 
   @Column(DataType.STRING)

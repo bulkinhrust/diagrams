@@ -66,17 +66,17 @@ class AuthController {
   };
   
   async refresh(req: Request, res: Response, next: NextFunction) {
-    const { refreshToken } = req.cookies;
-  
-    if (!refreshToken) {
-      throw ApiError.unauthorized('Ошибка токена');
-    }
-  
     try {
+      const { refreshToken } = req.cookies;
+    
+      if (!refreshToken) {
+        throw new ApiError(400, 'Ошибка токена');
+      }
       const userDto = verifyRefreshToken(refreshToken);
+
       const user = await User.findByPk(userDto?.id);
       if (!user) {
-        throw ApiError.unauthorized('Пользователь не найден');
+        throw new ApiError(400, 'Пользователь не найден');
       }
   
       const newAccessToken = generateAccessToken(mapUserToDto(user));
@@ -89,7 +89,17 @@ class AuthController {
 
   async currentUser(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      res.json(req.user);
+      res.json(mapUserToDto(req.user));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async logout(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      res.clearCookie('refreshToken');
+
+      res.json({ message: 'Вы успешно вышли' });
     } catch (error) {
       next(error);
     }

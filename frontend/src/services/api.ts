@@ -1,5 +1,5 @@
 import authStore from '@stores/auth/authStore';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 
 const api = axios.create({
@@ -21,19 +21,21 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     // Если ошибка 401 и это НЕ повторный запрос, пробуем обновить токен
     if (error.response?.status === 401 && !originalRequest._retry) {
-      console.log(originalRequest._retry, originalRequest);
       originalRequest._retry = true;
       try {
         const newAccessToken = await authStore.refreshToken();
         if (newAccessToken) {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return api(originalRequest);
+          return await api(originalRequest);
         }
       } catch (refreshError) {
-        authStore.logout();
-        return Promise.reject(refreshError);
+        if ((refreshError as AxiosError).response?.status === 401) {
+          await authStore.logout();
+          return Promise.reject(refreshError);
+        }
       }
     }
+    return Promise.reject(error);
   }
 );
 

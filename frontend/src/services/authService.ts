@@ -1,45 +1,37 @@
 import User from '../models/User';
 import http from './api';
+import { UserDto } from './dtos';
+import { mapDtoToUser } from './mappers';
 
 const URL = '/api/auth';
 
 type ReturnToken = { token: string };
-type ReturnUser = { refreshToken: string, accessToken: string, user: User };
+type ReturnUser = { accessToken: string, user: UserDto };
 
 class UserService {
-  async login(credential: string) {
+  async login(credential: string): Promise<{ accessToken: string; user: User }> {
     const res = await http.post<ReturnUser, { token: string }>(`${URL}/login`, { token: credential });
-    return res;
+    
+    return {
+      accessToken: res.accessToken, 
+      user: mapDtoToUser(res.user),
+    };
   }
-  // async login() {
-  //   const res = await http.post<ReturnUser, { token: string }>(`${URL}login`);
-
-  //   return res;
-  // }
 
   async refreshToken() {
     const res = await http.get<ReturnToken>(`${URL}/refresh`);
     return res?.token;
   }
 
-  // async checkAuth() {
-  //   console.log(4);
-  //   const res = await http.get<{ user: User }>(`${URL}/check`);
-
-  //   return res.user;
-  // }
-
   async currentUser() {
-    const res = await http.get<{ user: User }>(`${URL}/currentUser`);
+    const userDto = await http.get<UserDto>(`${URL}/currentUser`);
 
-    return res.user;
+    return mapDtoToUser(userDto);
   }
 
-  // async loginWithToken(code: string): Promise<{ user: User, accessToken: string }> {
-  //   const res = await http.post<{ user: User, accessToken: string }, { code: string}>(`${URL}/loginWithToken`, { code });
-
-  //   return res;
-  // }
+  async logout() {
+    return await http.get(`${URL}/logout`);
+  }
 }
 
 export default new UserService;

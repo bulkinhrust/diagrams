@@ -1,0 +1,31 @@
+:root {
+  --base-00: rgba(255, 255, 255, 1);
+  --base-01: rgba(252, 252, 252, 1);
+  --base-02: rgba(244, 244, 244, 1);
+  --base-03: rgb(239, 239, 239, 1);
+  --base-04: rgb(219, 219, 219);
+  --base-05: rgb(136, 137, 138, 1);
+  --base-06: rgba(111, 118, 126, 1);
+  --base-07: rgba(51, 56, 63, 1);
+  --base-08: rgba(39, 43, 48, 1);
+  --base-09: rgba(26, 29, 31, 1);
+  --base-10: rgba(17, 19, 21, 1);
+
+  $primary: rgb(42, 133, 255);
+  --primary-01: #{$primary};
+  --primary-02: #{lighten($primary, 6%)};
+  --primary-03: #{darken($primary, 16%)};
+
+  $danger: rgb(255, 106, 85);
+  --danger-01: #{$danger};
+  --danger-02: #{lighten($danger, 6%)};
+  --danger-03: #{lighten($danger, 28%)};
+
+  --success-01: rgb(131, 191, 110, 1);
+  --secondary-01: rgb(142, 89, 255);
+  // --secondary-01: rgba(255, 188, 153, 1);
+  // --secondary-02: rgba(202, 189, 255, 1);
+  // --secondary-03: rgba(177, 229, 252, 1);
+  // --secondary-04: rgba(181, 228, 202, 1);
+  // --secondary-05: rgba(255, 216, 141, 1);
+}

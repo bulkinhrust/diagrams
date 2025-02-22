@@ -21,13 +21,13 @@ export const authRoutes: IIndexRouteObject[] = [
 
 // Только для НЕ авторизованных пользователей.
 export const protectedRoutes: IIndexRouteObject[] = [
-  { path: '/auth', Component: Auth },
+  { path: '/auth/:method', Component: Auth },
 ];
 
 // Только для авторизованных пользователей.
 export const publicRoutes: IIndexRouteObject[] = [
-  { path: '/demo', Component: DemoBoard },
-  { path: '/pricing', Component: Pricing },
+  // { path: '/demo', Component: DemoBoard },
+  // { path: '/pricing', Component: Pricing },
   // { path: '/blog', Component: Blog },
   // { path: '/contact', Component: Contact },
   { path: '/', Component: HomePage }

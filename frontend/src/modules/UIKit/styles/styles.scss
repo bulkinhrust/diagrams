@@ -1,32 +1,10 @@
+@import "./color.scss";
+@import "./variables.scss";
 @import "../components/Button/Button";
 @import "../components/Card/Card";
 @import "../components/TextField/TextField";
+@import "../components/Typography/Typography";
 
 body {
-  --white: #fff;
-  --black: #000;
-
-  --main-color-100: #EFF7F7;
-  --main-color-200: #CEE7E8;
-  --main-color-300: #ADD8D9;
-  --main-color-400: #4EA5A7;
-  --main-color-500: #469597;
-  --main-color-600: #3A7C7E;
-  --main-color-700: #295758;
-  --main-color-800: #173232;
-
-  --base-color-100: #FBFAFB;
-  --base-color-200: #E5E3E4;
-  --base-color-300: #C0BCBE;
-  --base-color-400: #9C9498;
-  --base-color-500: #766E72;
-  --base-color-600: #4F494C;
-  --base-color-700: #272526;
-
-
-  --foam: #E5E3E4;
-  --wave: #BBC6C8;
-  --sky: #469597;
-  --sea: #5BA199;
-  --sand: #DDBEAA;
+  box-sizing: border-box;
 }

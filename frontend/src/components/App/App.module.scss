@@ -2,4 +2,9 @@
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
+  grid-template-columns: 340px 1fr;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar content';
+  background-color: var(--base-02);
 }

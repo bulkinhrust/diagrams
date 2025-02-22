@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import User from '../../models/User';
-import { Button } from '../../modules/UIKit';
+import { Button, ButtonProps } from '../../modules/UIKit';
 import classes from './Header.module.scss';
 
 type Props = {
@@ -21,34 +21,28 @@ const Header: React.FC<Props> = (props) => {
 
   const goTo = (to: string) => () => navigate(to);
 
-  const NavButton = ({ label, to }: { label: string;  to: string }) => (
-    <Button onClick={goTo(to)} variant={pathname === to ? 'primary' : 'base'}>{label}</Button>
+  const NavButton = ({ to, ...btnProps }: { to: string } & ButtonProps) => (
+    <Button
+      onClick={goTo(to)}
+      variant={pathname === to ? 'primary' : 'base'}
+      {...btnProps}
+    />
   );
 
   return (
     <div className={classes.component}>
-      <span
-        className={classes.logo}
-        onClick={() => navigate('/')}
-      >
-        DIAGRAMS
-      </span>
-
-      <div className={classes.toolbar}>
-        <NavButton label="Главная" to="/" />
-        <NavButton label="Доски" to="/dashboard" />
-        <NavButton label="Демо" to="/demo" />
-        <NavButton label="Тарифы" to="/pricing" />
+        {/* <NavButton to="/">Главная</NavButton>
+        <NavButton to="/dashboard" disabled>Доски</NavButton>
+        <NavButton to="/demo" size="small">Демо</NavButton>
+        <NavButton to="/pricing">Тарифы</NavButton> */}
         
 
         {isAuth && user
           ? (<>
-            <NavButton label={user.name ?? user.email} to="/profile" />
+            <NavButton to="/profile">{user.name ?? user.email}</NavButton>
             <Button onClick={handleLogout}>Выйти</Button>
           </>)
-          : <NavButton label="Войти или зарегистрироваться" to="/auth" />}
-      </div>
-        
+          : <NavButton to="/auth">Войти</NavButton>}
     </div>
   );
 };

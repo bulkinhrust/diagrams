@@ -1,11 +1,11 @@
 .component {
-  background-color: var(--main-color-500);
-  padding: 16px 32px;
-  color: var(--white);
+  grid-area: header;
+  padding: 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
+  background-color: var(--base-00);
+  box-shadow: inset 1px 0 0 var(--base-02);
 }
 
 .logo {
@@ -16,6 +16,7 @@
 }
 
 .toolbar {
+  align-items: center;
   display: flex;
   gap: 8px;
 }

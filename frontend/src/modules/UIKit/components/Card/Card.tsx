@@ -3,11 +3,11 @@ import { getClassName } from '../../utils/getClassName';
 
 import classes from './Card.module.scss';
 
-type Props = PropsWithChildren<{
-  className: string;
+export type CardProps = PropsWithChildren<{
+  className?: string;
 }>;
 
-const Card: React.FC<Props> = (props) => {
+const Card: React.FC<CardProps> = (props) => {
   const { children, className } = props;
   const classname = getClassName('card');
 

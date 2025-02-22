@@ -1,19 +1,27 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@UIKit';
-import authStore from '../../stores/auth/authStore';
+
+import { Button } from '@modules/UIKit';
 import classes from './HomePage.module.scss';
+import { useNavigate } from 'react-router-dom';
 
-type Props = {};
+const HomePage: React.FC = () => {
+  const navigate = useNavigate();
 
-const HomePage: React.FC<Props> = (props) => {
-  const {} = props;
-  const { isAuth, user, getUser, login } = authStore;
+  const goToAuth = (method: string) => () => navigate(`/auth/${method}`);
 
   return (
     <div className={classes.component}>
-      <button onClick={getUser}>currentUser</button>
-      <button onClick={login}>login</button>
+      <div className={classes.header}>
+        <h1>Crafty Craft</h1>
+        <div className={classes.buttons}>
+          <Button onClick={goToAuth('signin')} type="text">
+            Войти
+          </Button>
+          <Button onClick={goToAuth('signup')} variant="primary">
+            Зарегистрироваться
+          </Button>
+        </div>
+      </div>
       <div className={classes.content}>
         <p>Великолепное приложение!</p>
         <p>Купи лицензию!</p>

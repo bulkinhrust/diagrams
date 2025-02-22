@@ -1,10 +1,9 @@
 import React from 'react';
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import authStore from '@stores/auth/authStore';
 
-const OAuthComponent = () => {
+const OAuthComponent: React.FC = () => {
   const navigate = useNavigate();
   const { login } = authStore;
 
@@ -23,6 +22,8 @@ const OAuthComponent = () => {
     <GoogleLogin
       onError={handleLoginFailure} 
       onSuccess={handleLoginSuccess}
+      shape="pill"
+      type="icon"
       auto_select
     />
   );

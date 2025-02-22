@@ -1,7 +1,24 @@
 .component {
+  display: flex;
+  flex-direction: column;
 
+  .header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: var(--base-00);
+    border-bottom: 1px solid var(--base-02);
 
+    h1 {
+      margin: 0;
+    }
 
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+  }
 
   .content {
     padding: 16px;

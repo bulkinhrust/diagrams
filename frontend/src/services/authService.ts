@@ -7,10 +7,24 @@ const URL = '/api/auth';
 
 type ReturnToken = { token: string };
 type ReturnUser = { accessToken: string, user: UserDto };
+export type RegisterData = { email: string; password: string };
 
 class UserService {
-  async login(credential: string): Promise<{ accessToken: string; user: User }> {
-    const res = await http.post<ReturnUser, { token: string }>(`${URL}/login`, { token: credential });
+  async register(data: RegisterData): Promise<void> {
+    await http.post(`${URL}/register`, data);
+  }
+
+  async login(data: RegisterData): Promise<{ accessToken: string; user: User }> {
+    const res = await http.post<ReturnUser, RegisterData>(`${URL}/login`, data);
+    
+    return {
+      accessToken: res.accessToken, 
+      user: mapDtoToUser(res.user),
+    };
+  }
+
+  async googleLogin(credential: string): Promise<{ accessToken: string; user: User }> {
+    const res = await http.post<ReturnUser, { token: string }>(`${URL}/google-login`, { token: credential });
     
     return {
       accessToken: res.accessToken, 

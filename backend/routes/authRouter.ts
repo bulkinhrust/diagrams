@@ -5,7 +5,11 @@ import authMiddleware from '../middleware/AuthMiddleware';
 
 const router = express.Router();
 
+router.post('/register', authController.register);
+
 router.post('/login', authController.login);
+
+router.post('/google-login', authController.googleLogin);
 
 router.get('/refresh', authController.refresh);
 

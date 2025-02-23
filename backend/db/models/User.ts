@@ -1,6 +1,8 @@
+import bcrypt from 'bcrypt';
 import {
   AllowNull,
   AutoIncrement,
+  BeforeCreate,
   Column,
   CreatedAt,
   DataType,
@@ -9,7 +11,6 @@ import {
   Model,
   PrimaryKey,
   Table,
-  Unique,
   UpdatedAt,
 } from 'sequelize-typescript';
 import Diagram from './Diagram';
@@ -57,6 +58,17 @@ class User extends Model {
 
   @UpdatedAt
   declare updatedAt: Date;
+
+  @BeforeCreate
+  static async hashPassword(user: User) {
+    if (user.password) {
+      user.password = await bcrypt.hash(user.password, 10);
+    }
+  }
+
+  async comparePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }
 
 export default User;

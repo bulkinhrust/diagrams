@@ -5,11 +5,10 @@ import authStore from '@stores/auth/authStore';
 
 const OAuthComponent: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = authStore;
+  const { googleLogin } = authStore;
 
   const handleLoginSuccess = (response: CredentialResponse) => {
-    console.log('response', response);
-    login(response);
+    googleLogin(response);
     navigate('/diagrams');
   };
 

@@ -17,6 +17,7 @@ const Header: React.FC<Props> = (props) => {
 
   const handleLogout = () => {
     logout();
+    navigate('/');
   };
 
   const goTo = (to: string) => () => navigate(to);

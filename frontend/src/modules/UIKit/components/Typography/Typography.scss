@@ -8,4 +8,12 @@
     font-size: 0.8rem;
     line-height: 1.25rem;
   }
+
+  &_error {
+    color: var(--danger-01);
+  }
+
+  &_success {
+    color: var(--success-01);
+  }
 }

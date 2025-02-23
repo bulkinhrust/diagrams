@@ -1,11 +1,13 @@
-import React, { ChangeEventHandler, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 import { getClassName } from '../../utils/getClassName';
+import { useForm } from '../Form';
+import Typography from '../Typography';
 
 export type TextFieldProps = {
+  autocomplete?: string | boolean;
   endAdornment?: React.ReactNode;
-  error?: string;
   label?: string;
-  name?: string;
+  name: string;
   placeholder?: string;
   startAdornment?: React.ReactNode;
   type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
@@ -14,7 +16,6 @@ export type TextFieldProps = {
 const TextField: React.FC<TextFieldProps> = (props) => {
   const {
     endAdornment,
-    error,
     label,
     name,
     placeholder,
@@ -22,11 +23,13 @@ const TextField: React.FC<TextFieldProps> = (props) => {
     ...otherProps
   } = props;
   const classname = getClassName('tf');
-  const [value, setValue] = useState('');
   const ref = useRef<HTMLInputElement>(null);
+  const { errors, onBlur, onChange, onFocus, values } = useForm();
+  const error = errors[name];
+  const value = values[name];
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setValue(event.target.value);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(name, event.target.value);
   };
 
   const handleClick = () => {
@@ -51,6 +54,8 @@ const TextField: React.FC<TextFieldProps> = (props) => {
         <input
           className={classname('input')}
           name={name}
+          onBlur={onBlur}
+          onFocus={onFocus}
           onChange={handleChange}
           placeholder={placeholder}
           ref={ref}
@@ -63,7 +68,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           </span>
         )}
       </div>
-      
+      {!!error && <Typography size="small" type="error">{error}</Typography>}
     </div>
   );
 };

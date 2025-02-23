@@ -33,6 +33,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@icons': path.resolve(__dirname, './src/modules/icons/index'),
       '@modules': path.resolve(__dirname, './src/modules'),
       '@stores': path.resolve(__dirname, './src/stores'),
       '@UIKit': path.resolve(__dirname, './src/modules/UIKit/index'),

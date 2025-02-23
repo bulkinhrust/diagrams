@@ -1,8 +1,9 @@
 import { CredentialResponse } from '@react-oauth/google';
+import { AxiosError } from 'axios';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import User from '../../models/User';
-import authService from '../../services/authService';
+import authService, { RegisterData } from '../../services/authService';
 
 class AuthStore {
   loading = true;
@@ -14,9 +15,11 @@ class AuthStore {
       loading: observable,
       user: observable,
       fetchUser: action.bound,
+      googleLogin: action.bound,
       login: action.bound,
       logout: action.bound,
       refreshToken: action.bound,
+      register: action.bound,
       setToken: action.bound,
       setUser: action.bound,
     });
@@ -38,15 +41,43 @@ class AuthStore {
     this.user = user;
   }
 
-  async login(response: CredentialResponse) {
+  async register(data: RegisterData): Promise<boolean | string> {
     try {
-      const res = await authService.login(response.credential || '');
+      await authService.register(data);
+      return true;
+    } catch (e) {
+      if (e instanceof Error) {
+        return e.message;
+      }
+      return false;
+    }
+  }
+
+  async login(data: RegisterData): Promise<boolean | string> {
+    try {
+      const res = await authService.login(data);
+      if (res) {
+        this.setUser(res.user);
+        this.setToken(res.accessToken);
+      }
+      return true;
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        return e.response?.data.message;
+      }
+      return false;
+    }
+  }
+
+  async googleLogin(response: CredentialResponse) {
+    try {
+      const res = await authService.googleLogin(response.credential || '');
       if (res) {
         this.setUser(new User(res.user));
         this.setToken(res.accessToken);
       }
     } catch (e) {
-      console.error(e);
+      console.error('Failed to google login');
     }
   }
   
@@ -56,7 +87,7 @@ class AuthStore {
       this.setToken(token);
       return token;
     } catch (error) {
-      console.error('Failed to refresh token:', error);
+      console.error('Failed to refresh token');
       this.logout();
     }
   }
@@ -67,7 +98,7 @@ class AuthStore {
       this.setToken(null);
       this.setUser();
     } catch (error) {
-      console.error('Failed to logout', error);
+      console.error('Failed to logout');
       this.logout();
     }
   }
@@ -77,7 +108,7 @@ class AuthStore {
       const user = await authService.currentUser();
       this.setUser(new User(user));
     } catch (e) {
-      console.error(e);
+      console.error('Failed to get user');
     } finally {
       this.loading = false;
     }

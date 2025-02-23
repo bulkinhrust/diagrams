@@ -22,6 +22,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
+      "@icons": ["./src/modules/icons/index"],
       "@modules/*": ["./src/modules/*"],
       "@stores/*": ["./src/stores/*"],
       "@UIKit": ["./src/modules/UIKit/index"],

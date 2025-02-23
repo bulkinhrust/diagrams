@@ -7,7 +7,7 @@ import classes from './App.module.scss';
 import Sidebar from '../Sidebar';
 
 const App: React.FC = observer(() => {
-  const { fetchUser, isAuth, logout, user } = authStore;
+  const { fetchUser, isAuth, loading, logout, user } = authStore;
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -16,6 +16,10 @@ const App: React.FC = observer(() => {
       isMounted.current = true;
     }
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!isAuth) {
     return <AppRouter />;
